@@ -1,3 +1,6 @@
+## Live Demo
+
+https://smart-lender-gmxw.onrender.com
 # Smart Lender
 
 Smart Lender is a Machine Learning-based Loan Eligibility Prediction System.
