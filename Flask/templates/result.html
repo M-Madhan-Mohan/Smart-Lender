@@ -1,0 +1,17 @@
+{% if "Approved" in prediction %}
+
+<div class="alert alert-success text-center mt-4">
+    <h2>✅ Congratulations!</h2>
+    <h3>{{ prediction }}</h3>
+    <p>The applicant is likely eligible for the loan.</p>
+</div>
+
+{% else %}
+
+<div class="alert alert-danger text-center mt-4">
+    <h2>❌ Sorry!</h2>
+    <h3>{{ prediction }}</h3>
+    <p>The applicant may not be eligible for the loan.</p>
+</div>
+
+{% endif %}
