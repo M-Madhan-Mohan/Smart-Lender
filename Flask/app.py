@@ -12,6 +12,9 @@ scaler = pickle.load(open("models/scale1.pkl", "rb"))
 @app.route("/")
 def home():
     return render_template("home.html")
+@app.route("/dashboard")
+def dashboard():
+    return render_template("dashboard.html")
 
 
 @app.route("/predict")
