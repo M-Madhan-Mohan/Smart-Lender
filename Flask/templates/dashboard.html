@@ -1,11 +1,12 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
 
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 
-<title>Dashboard</title>
+<title>Smart Lender Dashboard</title>
 
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
@@ -15,19 +16,139 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
 <link rel="stylesheet"
 href="{{ url_for('static', filename='css/style.css') }}">
 
+<style>
+
+body{
+background:#f4f7fc;
+}
+
+.dashboard-header{
+background:linear-gradient(135deg,#2563eb,#0f172a);
+color:white;
+padding:40px;
+border-radius:20px;
+margin-bottom:35px;
+box-shadow:0 15px 40px rgba(0,0,0,.15);
+}
+
+.dashboard-header h2{
+font-weight:700;
+}
+
+.dashboard-header p{
+opacity:.9;
+margin-top:10px;
+}
+
+.card-box{
+
+background:white;
+
+padding:30px;
+
+border-radius:18px;
+
+box-shadow:0 8px 20px rgba(0,0,0,.08);
+
+transition:.3s;
+
+height:100%;
+
+}
+
+.card-box:hover{
+
+transform:translateY(-6px);
+
+}
+
+.card-icon{
+
+font-size:42px;
+
+margin-bottom:15px;
+
+}
+
+.stat-number{
+
+font-size:34px;
+
+font-weight:700;
+
+margin-bottom:5px;
+
+}
+
+.table-card{
+
+background:white;
+
+padding:25px;
+
+border-radius:18px;
+
+box-shadow:0 8px 20px rgba(0,0,0,.08);
+
+}
+
+.sidebar-card{
+
+background:white;
+
+padding:25px;
+
+border-radius:18px;
+
+box-shadow:0 8px 20px rgba(0,0,0,.08);
+
+margin-bottom:25px;
+
+}
+
+.chart-card{
+
+background:white;
+
+padding:25px;
+
+border-radius:18px;
+
+box-shadow:0 8px 20px rgba(0,0,0,.08);
+
+}
+
+footer{
+
+margin-top:50px;
+
+padding:25px;
+
+text-align:center;
+
+color:#666;
+
+}
+
+</style>
+
 </head>
 
 <body>
 
-<nav class="navbar navbar-dark">
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
 
 <div class="container">
 
 <a class="navbar-brand fw-bold">
 
-🏦 Smart Lender Dashboard
+<i class="fa-solid fa-building-columns"></i>
+
+Smart Lender
 
 </a>
+
+<div>
 
 <a href="/" class="btn btn-light">
 
@@ -35,77 +156,45 @@ Home
 
 </a>
 
+<a href="/predict" class="btn btn-primary">
+
+New Prediction
+
+</a>
+
+</div>
+
 </div>
 
 </nav>
 
 <div class="container mt-5">
 
+<div class="dashboard-header">
+
+<div class="row align-items-center">
+
+<div class="col-lg-8">
+
 <h2>
 
-Good Welcome 👋
+Welcome Back, {{ session['user'] }} 👋
 
 </h2>
 
 <p>
 
-AI Powered Loan Eligibility Prediction System
+Monitor loan applications, AI predictions and banking analytics from one dashboard.
 
 </p>
 
-<div class="row mt-4">
-
-<div class="col-md-3">
-
-<div class="stat-card text-center">
-
-<i class="fa-solid fa-circle-check fa-3x text-success"></i>
-
-<h2>764</h2>
-
-<p>Approved</p>
-
 </div>
 
-</div>
+<div class="col-lg-4 text-end">
 
-<div class="col-md-3">
+<i class="fa-solid fa-chart-line"
 
-<div class="stat-card text-center">
-
-<i class="fa-solid fa-circle-xmark fa-3x text-danger"></i>
-
-<h2>236</h2>
-
-<p>Rejected</p>
-
-</div>
-
-</div>
-
-<div class="col-md-3">
-
-<div class="stat-card text-center">
-
-<i class="fa-solid fa-brain fa-3x text-primary"></i>
-
-<h2>4</h2>
-
-<p>ML Models</p>
-
-</div>
-
-</div>
-
-<div class="col-md-3">
-
-<div class="stat-card text-center">
-
-<i class="fa-solid fa-chart-line fa-3x text-warning"></i>
-
-<h2>76.4%</h2>
-
-<p>Accuracy</p>
+style="font-size:90px;opacity:.3;"></i>
 
 </div>
 
@@ -113,31 +202,145 @@ AI Powered Loan Eligibility Prediction System
 
 </div>
 
-<hr class="my-5">
+<div class="row g-4">
 
-<div class="row">
+<div class="col-lg-3 col-md-6">
+
+<div class="card-box text-center">
+
+<div class="card-icon text-primary">
+
+<i class="fa-solid fa-users"></i>
+
+</div>
+
+<div class="stat-number"
+
+id="totalCounter">
+
+{{total}}
+
+</div>
+
+<p>Total Applications</p>
+
+</div>
+
+</div>
+
+<div class="col-lg-3 col-md-6">
+
+<div class="card-box text-center">
+
+<div class="card-icon text-success">
+
+<i class="fa-solid fa-circle-check"></i>
+
+</div>
+
+<div class="stat-number"
+
+id="approvedCounter">
+
+{{approved}}
+
+</div>
+
+<p>Approved Loans</p>
+
+</div>
+
+</div>
+
+<div class="col-lg-3 col-md-6">
+
+<div class="card-box text-center">
+
+<div class="card-icon text-danger">
+
+<i class="fa-solid fa-circle-xmark"></i>
+
+</div>
+
+<div class="stat-number"
+
+id="rejectedCounter">
+
+{{rejected}}
+
+</div>
+
+<p>Rejected Loans</p>
+
+</div>
+
+</div>
+
+<div class="col-lg-3 col-md-6">
+
+<div class="card-box text-center">
+
+<div class="card-icon text-warning">
+
+<i class="fa-solid fa-chart-pie"></i>
+
+</div>
+
+<div class="stat-number">
+
+{{accuracy}}%
+
+</div>
+
+<p>Approval Rate</p>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="row mt-5">
+
+<!-- MAIN CONTENT -->
+
+<!-- RECENT PREDICTIONS -->
 
 <div class="col-lg-8">
 
-<div class="form-card">
+<div class="table-card">
 
-<h3>
+<div class="d-flex justify-content-between align-items-center mb-4">
 
-Recent Loan Predictions
+<h3 class="fw-bold">
+
+<i class="fa-solid fa-clock-rotate-left text-primary"></i>
+
+Recent Predictions
 
 </h3>
 
-<table class="table table-hover mt-4">
+<a href="/history" class="btn btn-outline-primary">
 
-<thead>
+View History
+
+</a>
+
+</div>
+
+<table class="table table-hover align-middle">
+
+<thead class="table-dark">
 
 <tr>
 
 <th>Applicant</th>
 
-<th>Status</th>
+<th>Income</th>
 
-<th>Risk</th>
+<th>Loan Amount</th>
+
+<th>Status</th>
 
 </tr>
 
@@ -145,45 +348,69 @@ Recent Loan Predictions
 
 <tbody>
 
-<tr>
+{% if recent %}
 
-<td>Rahul Kumar</td>
-
-<td><span class="badge bg-success">Approved</span></td>
-
-<td>Low</td>
-
-</tr>
+{% for row in recent %}
 
 <tr>
 
-<td>Priya Sharma</td>
+<td>
 
-<td><span class="badge bg-danger">Rejected</span></td>
+<strong>{{ row[0] }}</strong>
 
-<td>High</td>
+</td>
+
+<td>
+
+₹ {{ row[1] }}
+
+</td>
+
+<td>
+
+₹ {{ row[2] }}
+
+</td>
+
+<td>
+
+{% if "Approved" in row[4] %}
+
+<span class="badge bg-success">
+
+Approved
+
+</span>
+
+{% else %}
+
+<span class="badge bg-danger">
+
+Rejected
+
+</span>
+
+{% endif %}
+
+</td>
 
 </tr>
+
+{% endfor %}
+
+{% else %}
 
 <tr>
 
-<td>Ajay Singh</td>
+<td colspan="4" class="text-center text-muted">
 
-<td><span class="badge bg-success">Approved</span></td>
+No predictions available.
 
-<td>Low</td>
-
-</tr>
-
-<tr>
-
-<td>Anjali Verma</td>
-
-<td><span class="badge bg-warning text-dark">Review</span></td>
-
-<td>Medium</td>
+</td>
 
 </tr>
+
+{% endif %}
 
 </tbody>
 
@@ -193,37 +420,199 @@ Recent Loan Predictions
 
 </div>
 
+<!-- SIDEBAR -->
+
 <div class="col-lg-4">
 
-<div class="form-card">
+<div class="sidebar-card">
 
-<h3>
+<h4>
 
 Quick Actions
 
-</h3>
+</h4>
 
-<br>
+<hr>
 
-<a href="/predict" class="btn btn-main w-100 mb-3">
+<a href="/predict"
+
+class="btn btn-primary w-100 mb-3">
+
+<i class="fa-solid fa-plus"></i>
 
 New Prediction
 
 </a>
 
-<button class="btn btn-outline-primary w-100 mb-3">
+<a href="/history"
 
-Download Report
+class="btn btn-success w-100 mb-3">
 
-</button>
+<i class="fa-solid fa-clock-rotate-left"></i>
 
-<button class="btn btn-outline-dark w-100">
+Prediction History
 
-Analytics
+</a>
 
-</button>
+<a href="/dashboard"
+
+class="btn btn-outline-dark w-100">
+
+<i class="fa-solid fa-rotate"></i>
+
+Refresh Dashboard
+
+</a>
 
 </div>
+
+<div class="sidebar-card">
+
+<h4>
+
+AI Insights
+
+</h4>
+
+<hr>
+
+<div class="mb-3">
+
+<h6>
+
+Total Applications
+
+</h6>
+
+<h3 class="text-primary">
+
+{{ total }}
+
+</h3>
+
+</div>
+
+<div class="mb-3">
+
+<h6>
+
+Approved Loans
+
+</h6>
+
+<h3 class="text-success">
+
+{{ approved }}
+
+</h3>
+
+</div>
+
+<div class="mb-3">
+
+<h6>
+
+Rejected Loans
+
+</h6>
+
+<h3 class="text-danger">
+
+{{ rejected }}
+
+</h3>
+
+</div>
+
+<div>
+
+<h6>
+
+Approval Rate
+
+</h6>
+
+<h3 class="text-warning">
+
+{{ accuracy }}%
+
+</h3>
+
+</div>
+
+</div>
+
+<div class="sidebar-card">
+
+<h4>
+
+System Status
+
+</h4>
+
+<hr>
+
+<p>
+
+🟢 Prediction Server
+
+</p>
+
+<p>
+
+🟢 SQLite Database
+
+</p>
+
+<p>
+
+🟢 AI Model Loaded
+
+</p>
+
+<p>
+
+🟢 Flask Running
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- CHARTS -->
+
+<div class="row mt-5">
+
+<div class="col-lg-6">
+
+<div class="chart-card">
+
+<h3 class="mb-4">
+
+Loan Approval Statistics
+
+</h3>
+
+<canvas id="barChart"></canvas>
+
+</div>
+
+</div>
+
+<div class="col-lg-6">
+
+<div class="chart-card">
+
+<h3 class="mb-4">
+
+Approval Distribution
+
+</h3>
+
+<canvas id="pieChart"></canvas>
 
 </div>
 
@@ -233,9 +622,177 @@ Analytics
 
 <footer>
 
-© 2026 Smart Lender
+<div class="container">
+
+<hr>
+
+<p class="text-center text-muted">
+
+© 2026 Smart Lender | AI Powered Loan Eligibility Prediction System
+
+</p>
+
+</div>
 
 </footer>
+
+<!-- Chart.js -->
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+
+// ==========================
+// Dynamic Values
+// ==========================
+
+const total = Number("{{ total }}");
+const approved = Number("{{ approved }}");
+const rejected = Number("{{ rejected }}");
+
+// ==========================
+// Animated Counter
+// ==========================
+
+function animateValue(id, end){
+
+let obj=document.getElementById(id);
+
+let current=0;
+
+let increment=Math.max(1,Math.ceil(end/80));
+
+let timer=setInterval(function(){
+
+current=current+increment;
+
+if(current>=end){
+
+current=end;
+
+clearInterval(timer);
+
+}
+
+obj.innerHTML=current;
+
+},20);
+
+}
+
+animateValue("totalCounter",total);
+animateValue("approvedCounter",approved);
+animateValue("rejectedCounter",rejected);
+
+// ==========================
+// Bar Chart
+// ==========================
+
+new Chart(document.getElementById("barChart"),{
+
+type:"bar",
+
+data:{
+
+labels:["Approved","Rejected"],
+
+datasets:[{
+
+label:"Loan Applications",
+
+data:[approved,rejected],
+
+backgroundColor:[
+
+"#22c55e",
+
+"#ef4444"
+
+],
+
+borderRadius:10
+
+}]
+
+},
+
+options:{
+
+responsive:true,
+
+plugins:{
+
+legend:{
+
+display:false
+
+}
+
+},
+
+scales:{
+
+y:{
+
+beginAtZero:true
+
+}
+
+}
+
+}
+
+});
+
+// ==========================
+// Pie Chart
+// ==========================
+
+new Chart(document.getElementById("pieChart"),{
+
+type:"doughnut",
+
+data:{
+
+labels:["Approved","Rejected"],
+
+datasets:[{
+
+data:[approved,rejected],
+
+backgroundColor:[
+
+"#2563eb",
+
+"#f97316"
+
+],
+
+hoverOffset:20
+
+}]
+
+},
+
+options:{
+
+responsive:true,
+
+plugins:{
+
+legend:{
+
+position:"bottom"
+
+}
+
+}
+
+}
+
+});
+
+</script>
 
 </body>
 
