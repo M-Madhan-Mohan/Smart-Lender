@@ -1,4 +1,5 @@
 from flask import Flask, render_template, request
+from database import create_database, save_prediction, get_predictions
 import pickle
 import numpy as np
 
@@ -8,6 +9,7 @@ app = Flask(__name__)
 model = pickle.load(open("models/rdf.pkl", "rb"))
 scaler = pickle.load(open("models/scale1.pkl", "rb"))
 
+create_database()
 
 @app.route("/")
 def home():
@@ -58,11 +60,28 @@ def submit():
     prediction = model.predict(features)
 
     if prediction[0] == 1:
-        result = "Loan Approved ✅"
+      result = "Loan Approved ✅"
     else:
-        result = "Loan Rejected ❌"
+      result = "Loan Rejected ❌"
+
+
+    save_prediction((
+    str(gender),
+    str(married),
+    str(dependents),
+    str(education),
+    str(self_employed),
+    applicant_income,
+    coapplicant_income,
+    loan_amount,
+    loan_term,
+    str(credit_history),
+    str(property_area),
+    result
+))
 
     return render_template("result.html", prediction=result)
+   
 
 
 if __name__ == "__main__":
